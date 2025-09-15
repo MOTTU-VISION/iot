@@ -1,9 +1,9 @@
 from camera_processor import generate_frames
 from flask import Flask, jsonify, Response
 from analyzer import check_alerts
-from vision import analyze_frame
-from storage import save_record, load_records
+from storage import  load_records
 import cv2
+from worker import start_workers
 
 app = Flask(__name__)
 
@@ -13,14 +13,14 @@ CAMERA_PATHS = {
     "camera3": "data/videos/camera3.mp4",
     "camera4": "data/videos/camera4.mp4",
 }
+start_workers(CAMERA_PATHS)
 
 @app.route("/stream/<camera_id>")
 def stream(camera_id):
     def gen():
         for frame in generate_frames(CAMERA_PATHS[camera_id]):
             _, buffer = cv2.imencode('.jpg', frame)
-            record = analyze_frame(frame, camera_id)
-            save_record(camera_id, record)
+
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
     return Response(gen(), mimetype="multipart/x-mixed-replace; boundary=frame")
