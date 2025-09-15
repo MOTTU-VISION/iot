@@ -1,0 +1,6 @@
+/backend/data/videos/
+/backend/data/records/
+/backend/yolo*
+
+/backend/__pycache__/
+/backend/*.pyc
