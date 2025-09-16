@@ -130,7 +130,7 @@ const Home = () => {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200 p-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 p-1">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -217,7 +217,8 @@ const Home = () => {
       {alertsOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
           <div className="bg-white w-96 h-full shadow-xl overflow-y-auto">
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+
+            <div className="p-5 border-b border-gray-200 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-red-600" />
                 Alertas Ativos
@@ -247,6 +248,7 @@ const Home = () => {
                 </div>
               ))}
             </div>
+            
           </div>
         </div>
       )}
