@@ -1,8 +1,7 @@
-import time
-
 import cv2
-from vision import analyze_frame
+import time
 from storage import save_record
+from vision import analyze_frame
 
 def process_camera(camera_id, video_path, frame_skip=5):
     cap = cv2.VideoCapture(video_path)
@@ -22,7 +21,7 @@ def process_camera(camera_id, video_path, frame_skip=5):
         if record:
             save_record(camera_id, record)
 
-        time.sleep(0.1)
+        time.sleep(0.2)
 
 def generate_frames(video_path):
     cap = cv2.VideoCapture(video_path)

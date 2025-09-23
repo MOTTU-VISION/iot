@@ -2,6 +2,7 @@ import cv2
 import easyocr
 from ultralytics import YOLO
 from flask import Flask, Response
+import re
 
 # Modelo YOLO treinado para detectar PLACAS (não veículos)
 plate_model = YOLO("yolov8n.pt")
@@ -10,7 +11,7 @@ ocr_reader = easyocr.Reader(["en"])  # OCR
 app = Flask(__name__)
 
 CAMERA_PATHS = {
-    "camera1": "../data/videos/camera1.mp4",
+    "camera1": "../data/videos/camera4.mp4",
 }
 
 def generate_frames(video_path):
