@@ -6,3 +6,4 @@
 /backend/*.pyc
 
 /frontend/node_modules/
+backend/data/alerts/alerts.json

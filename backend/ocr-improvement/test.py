@@ -50,15 +50,16 @@ def generate_frames(video_path):
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
                 # Mostrar OCR acima da placa
-                cv2.putText(
-                    frame,
-                    plate_text,
-                    (x1, y1 - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.7,
-                    (0, 255, 0),
-                    2
-                )
+                if plate_text != "unknow":
+                    cv2.putText(
+                        frame,
+                        plate_text,
+                        (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.7,
+                        (0, 255, 0),
+                        2
+                    )
 
         # Codifica para streaming
         _, buffer = cv2.imencode('.jpg', frame)

@@ -35,11 +35,18 @@ def save_record(camera_id, record):
                 json.dump(records_cache[camera_id], f, indent=2)
 
 def load_records(camera_id):
-    with _lock:
+    with _lock: #cache
         return records_cache.get(camera_id, [])
 
 def read_records_from_file(camera_id):
     file_path = DATA_DIR / f"{camera_id}.json"
+    if file_path.exists():
+        with open(file_path, "r") as f:
+            return json.load(f)
+    return []
+
+def read_all_records_from_file():
+    file_path = DATA_DIR / "records.json"
     if file_path.exists():
         with open(file_path, "r") as f:
             return json.load(f)

@@ -4,7 +4,7 @@ from worker import start_workers
 from analyzer import check_alerts
 from flask import Flask, jsonify, Response
 from camera_processor import generate_frames
-from storage import load_records, read_records_from_file, load_alerts, read_alerts_from_file
+from storage import load_records, read_records_from_file, load_alerts, read_alerts_from_file, read_all_records_from_file
 
 app = Flask(__name__)
 CORS(app, origins="*")
@@ -34,16 +34,21 @@ def get_records(camera_id):
 
 @app.route("/alerts")
 def get_alerts():
-    known_plates = ["ABC1234", "XYZ9999"]
+    known_plates = ["JAF9344", "XYZ9999"]
     check_alerts(known_plates)
     alerts = load_alerts() #cache
     if not alerts:
         alerts = read_alerts_from_file()
     return jsonify(alerts)
 
-@app.route("/records/file/<camera_id>", methods=["GET"])
+@app.route("/records/file/<camera_id>")
 def get_file_records(camera_id):
     records = read_records_from_file(camera_id)
+    return jsonify(records), 200
+
+@app.route("/records/file/all")
+def get_all_file_records():
+    records = read_all_records_from_file()
     return jsonify(records), 200
 
 if __name__ == "__main__":
