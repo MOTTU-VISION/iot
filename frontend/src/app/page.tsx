@@ -9,10 +9,10 @@ import { Alerts, Cam, Records } from "@/types";
 
 const Home = () => {
   const [cameras] = useState<Cam[]>([
-    { id: "camera1", name: "Câmera Entrada", location: "Hall Principal", status: "online" },
-    { id: "camera2", name: "Câmera Estacionamento", location: "Área Externa", status: "online" },
-    { id: "camera3", name: "Câmera Escritório", location: "Sala 205", status: "online" },
-    { id: "camera4", name: "Câmera Depósito", location: "Térreo", status: "online" },
+    { id: "camera1", name: "Câmera1", location: "Patio1", status: "online" },
+    { id: "camera2", name: "Câmera2", location: "Patio2", status: "online" },
+    { id: "camera3", name: "Câmera3", location: "Patio3", status: "online" },
+    { id: "camera4", name: "Câmera4", location: "Patio4", status: "online" },
   ]);
 
   const [alerts, setAlerts] = useState<Alerts[]>([]);
@@ -48,7 +48,7 @@ const Home = () => {
       }
     };
 
-    // fetchAlerts();
+    fetchAlerts();
   }, []);
 
   return (

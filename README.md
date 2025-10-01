@@ -1,272 +1,273 @@
-# MottuVision Reconhecimento de Placas
+# MottuVision – Reconhecimento de Placas Veiculares
 
-O Sistema de Reconhecimento de Placas Veiculares é uma solução de visão computacional desenvolvida em Python que utiliza técnicas de processamento de imagem e reconhecimento óptico de caracteres (OCR) para identificar automaticamente placas de veículos a partir de vídeos. O projeto é composto por dois módulos principais:
+O **MottuVision** é um sistema de visão computacional desenvolvido em **Python** que utiliza técnicas de **detecção de objetos (YOLO)** e **reconhecimento óptico de caracteres (OCR via EasyOCR)** para identificar automaticamente placas de veículos a partir de vídeos ou câmeras em tempo real.  
+
+O sistema foi estruturado em **camadas independentes**, permitindo maior organização, escalabilidade e manutenibilidade:
+
+- **Camada de Orquestração (app.py)**: Inicializa o sistema, gerencia os serviços de câmera, processamento e armazenamento.  
+- **Camada de Processamento de Câmera (camera_processor.py)**: Leitura contínua dos vídeos/câmeras, envio de frames para análise.  
+- **Camada de Visão Computacional (vision.py)**: Utiliza YOLO para detectar placas nos frames e EasyOCR para extrair o texto.  
+- **Camada de Armazenamento (storage.py)**: Gerencia cache em memória e escrita otimizada em disco (JSON).
 
 ## 📋 Índice
 
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Video de desmonstração](#-video-de-demostração)
-- [Funcionalidades](#-funcionalidades)
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [Hardware Necessário](#-hardware-necessário)
-- [Configuração do Ambiente](#️-configuração-do-ambiente)
-- [Instalação](#-instalação)
-- [Como Usar](#-como-usar)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Simulação](#-simulação)
-- [Contribuição](#-contribuição)
-- [Licença](#-licença)
-- [Desenvolvedores](#-desenvolvedores)
-- [Links Úteis](#-links-úteis)
+- [Sobre o Projeto](#-sobre-o-projeto)  
+- [Vídeo de Demonstração](#-vídeo-de-demostração)
+- [Funcionalidades](#-funcionalidades)  
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)  
+- [Hardware Necessário](#-hardware-necessário)  
+- [Configuração do Ambiente](#️-configuração-do-ambiente)  
+- [Instalação](#-instalação)   
+- [Estrutura do Projeto](#-estrutura-do-projeto)  
+- [Simulação](#-simulação) 
+- [Screenshots](#-screenshots) 
+- [Estrutura de Dados](#-estrutura-de-dados) 
+- [Desenvolvedores](#-desenvolvedores)  
+- [Links Úteis](#-links-úteis)  
+- [Licença](#-licença)  
 
-1. **Módulo de Análise de Placas (main.py)**: Converte vídeos em frames individuais, processa cada imagem utilizando EasyOCR para extrair texto, valida se o texto corresponde ao padrão de placas brasileiras (formato Mercosul: ABC1D23) e armazena os resultados em arquivo JSON com as precisões de detecção.
+---
 
-2. **API Flask (api.py)**: Uma API REST simples que lê o arquivo JSON gerado pelo módulo de análise e disponibiliza um endpoint para consultar todas as placas identificadas no formato padronizado.
+## 🚦 Sobre o Projeto
 
-O sistema foi desenvolvido especificamente para o padrão de placas brasileiras Mercosul e é ideal para análise de vídeos de monitoramento de tráfego, controle de acesso e sistemas de segurança veicular.
+O sistema detecta e reconhece **placas no padrão brasileiro Mercosul (ABC1D23)** em tempo real ou em vídeos previamente gravados.  
+Ele mantém uma lista de registros atualizada em **background**, evitando perda de dados caso um veículo saia do campo de visão.  
 
-## Desenvolvedores
+Aplicações práticas:  
+- Controle de acesso
+- Monitoramento de tráfego
+- Sistemas de segurança veicular
+
+---
+
+## 📹 Vídeo de Demonstração
+
+**Demonstração Completa do Sistema**: [YouTube](https://youtu.be/W_g3iX-E5Y4)
+
+O vídeo apresenta:
+- Detecção de placas em tempo real com videos pré-gravados
+- OCR com validação no padrão Mercosul
+- Visualização de dados em dashboard
+
+---
+
+## ✨ Funcionalidades
+
+- Captura contínua de vídeo (RTSP, webcam ou arquivos locais)  
+- Detecção de placas com **YOLO**  
+- Reconhecimento de caracteres com **EasyOCR**  
+- Validação no formato brasileiro Mercosul  
+- Armazenamento em cache com escrita otimizada em JSON  
+- API Flask para consulta dos registros em tempo real  
+
+---
+
+## 🛠 Tecnologias Utilizadas
+
+- **Python 3.9+**
+- **Flask** – API REST
+- **Git** - Versionamento
+- **JSON** – Estrutura de dados
+- **YOLOv8** – detecção de placas
+- **OpenCV** – captura e manipulação de vídeo
+- **EasyOCR** – reconhecimento de caracteres alfanuméricos
+- **Threading** – execução simultânea do processamento das fontes
+- **Next** – Framework Front-End
+- **Axios** – Client HTTP baseado em promises
+
+---
+
+## 💻 Hardware Necessário
+
+- GPU Dedicada (Opicional)
+- 8GB RAM (mínimo)
+- Processador Quad-Core
+- Drivers **CUDA** + **cuDNN** configurados  
+> ⚠️ Sem GPU, o sistema roda na CPU, porém com performance reduzida.  
+> ⚠️ Os testes foram feitos com uma RTX 2070(GPU) e em um i7 de 4a Geração(CPU) separadamente.
+
+---
+
+## 🐈‍⬛ Clone do Projeto (GitHub)
+
+Acesse o projeto em https://github.com/MOTTU-VISION/iot.git
+
+![alt text](/assets/image-2.png)
+
+selecione uma das opções em **<> Code**
+
+![alt text](/assets/image-4.png)
+
+#### Ou simplesmente execute no git bash:
+```
+git clone https://github.com/MOTTU-VISION/iot.git.
+
+```
+
+## ⚙️ Configuração do Ambiente
+
+#### Dentro da pasta iot execute:
+
+```bash
+cd backend
+
+# Criação do ambiente virtual
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\\Scripts\\activate      # Windows
+
+# Instalação das dependências
+pip install -r requirements.txt
+
+```
+
+## 📁 Estrutura do Projeto
+
+```
+iot/
+├── backend/
+├── frontend/
+├── .gitignore
+├── LICENSE
+└── README.md
+
+iot/
+└── backend/
+    └── data/
+    │   ├── alerts/             # Alertas criados pelo sistema
+    │   ├── records/            # Registros criados via OCR
+    │   └── video/              # Videos locais para análise
+    └── .venv/
+    └── app.py                  # Inicializa o sistema
+    └── vision.py               # Recebe frames e aplica 
+    └── worker.py               # Inicializa o processamento em threads
+    └── storage.py              # Realiza a montagem e persistência local dos dados
+    └── analyzer.py             # Recebe a analiza os frames em tempo real com YOLO e OCR
+    └── camera_processor.py     # Cria instâncias de camera em threads com base no worker.py
+    └── gpu_support_test.py     # Verifica se os drivers CUDA e cuDNN estão configurados previamente
+
+iot/
+└── frontend/
+    └── public/
+    └── src/
+    |   └── api/                # Criação do client com axios
+    |   └── app/                # Página principal
+    |   └── components/         # Components funcionais
+    |   └── types/              # Tipagem typescript
+    └── package-lock.json
+    └── package.json
+    └── tsconfig.json
+
+```
+
+## 💻 Simulação
+
+Após configurar o ambiente virtual execute os seguintes comandos
+
+```bash
+# Dentro da pasta iot
+
+cd frontend
+
+npm install
+
+npm run dev
+
+# Após executar os comandos aparecerá em qual porta do sistema a aplicação estará em execução
+```
+![alt text](/assets/image-5.png)
+
+Após iniciar o frontend vamos iniciar o backend. Execute os seguintes comandos:
+
+```bash
+# Desntro da pasta iot
+
+cd backend
+
+python app.py 
+
+# Após executar os comandos aparecerá em qual porta do sistema a aplicação estará em execução
+```
+![alt text](/assets/image-6.png)
+
+## 📸 Screenshots
+
+![alt text](/assets/image-7.png)
+
+![alt text](/assets/image-8.png)
+
+![alt text](/assets/image-9.png)
+
+## 💾 Estrutura de Dados
+
+Abaixo veremos a representação dos dados criados pelo sistema
+
+### Registros
+
+```bash
+[
+  {
+    "camera_id": "camera1",
+    "timestamp": 1759342285.234748,
+    "placa": "JAF9344",
+    "bounding_box": [
+      82,
+      487,
+      214,
+      783
+    ],
+    "label": "3"
+  },
+]
+```
+
+### Alertas
+
+```bash
+[
+  {
+    "camera_id": "camera2",
+    "placa": "EBR8E70",
+    "timestamp": 1759342285.6055796,
+    "alert": "Placa n\u00e3o cadastrada",
+    "severity": "low"
+  },
+]
+```
+
+## 👨‍💻 Desenvolvedores
 
 Este projeto foi desenvolvido por:
 
-- **Daniel Barros RM 556152** - *Desenvolvedor Python* - [GitHub](https://github.com/Barros263inf) | [LinkedIn](https://www.linkedin.com/in/danielbarros63)
-- **Luccas Alencar RM 558253** - *Desenvolvedor em Back-End* - [GitHub](https://github.com/LuccasAlencar) | [LinkedIn](https://www.linkedin.com/in/luccasalencar/)
-- **Raul Claussn RM 556152** - *Desenvolvedor Python* - [GitHub](https://github.com/Barros263inf) | [LinkedIn](https://www.linkedin.com/in/danielbarros63)
+- **Daniel Barros RM 556152** - *Desenvolvedor* - [GitHub](https://github.com/Barros263inf) | [LinkedIn](https://www.linkedin.com/in/danielbarros63)
+- **Luccas Alencar RM 558253** - *Desenvolvedor* - [GitHub](https://github.com/LuccasAlencar) | [LinkedIn](https://www.linkedin.com/in/luccasalencar/)
+- **Raul Claussn RM 556152** - *Desenvolvedor* - [GitHub](https://https://github.com/RaulClauson) | [LinkedIn](https://www.linkedin.com/in/raul-clauson/)
 
-## Link para Vídeo de Apresentação
+## 🔗 Links Úteis
 
-📺 **Demonstração Completa do Sistema**: [YouTube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- [OCR](https://nextjs.org/)
+- [YOLO](https://nextjs.org/)
+- [Next Js](https://nextjs.org/)
+- [Baixe o Git](https://git-scm.com/downloads)
 
-O vídeo apresenta uma demonstração prática do sistema em funcionamento, incluindo:
-- Processo de detecção de placas em tempo real
-- Interface da API e seus endpoints
+## 📄 MIT License
 
-## Tecnologias Utilizadas
+Copyright (c) 2025 MOTTU-VISION
 
-### Módulo de Análise de Placas (main.py)
-- **Python 3.8+** - Linguagem principal do projeto
-- **OpenCV 4.8.0** - Processamento de vídeo e extração de frames
-- **EasyOCR 1.7.0** - Reconhecimento óptico de caracteres (OCR)
-- **Loguru 0.7.0** - Sistema de logging avançado
-- **tqdm 4.65.0** - Barras de progresso para processamento
-- **Regex (re)** - Validação de padrões de placas brasileiras
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-### API Flask (api.py)
-- **Flask 2.3.0** - Framework web minimalista para Python
-- **JSON** - Formato de dados para armazenamento e comunicação
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-### Ferramentas de Desenvolvimento
-- **pip** - Gerenciador de pacotes Python
-- **Git** - Controle de versão
-
-## Passo a Passo para Execução Local
-
-### Pré-requisitos
-
-Certifique-se de ter instalado em sua máquina:
-- Python 3.8 ou superior
-- pip (gerenciador de pacotes Python)
-- Git
-- Arquivo de vídeo para análise (formato .mp4)
-
-### 1. Clone do Repositório
-
-```bash
-git clone https://github.com/Barros263inf/mottuvision.git
-cd mottuvision
-```
-
-### 2. Configuração do Ambiente Virtual
-
-```bash
-# Criação do ambiente virtual
-python -m venv venv
-
-# Ativação do ambiente virtual
-# No Windows:
-venv\Scripts\activate
-# No Linux/Mac:
-source venv/bin/activate
-```
-
-### 3. Instalação das Dependências
-
-```bash
-# Criar arquivo requirements.txt com as dependências necessárias
-pip install opencv-python==4.8.0
-pip install easyocr==1.7.0
-pip install loguru==0.7.0
-pip install tqdm==4.65.0
-pip install flask==2.3.0
-
-# Ou instalar diretamente:
-pip install opencv-python easyocr loguru tqdm flask
-```
-
-### 4. Execução do Módulo de Análise de Placas
-
-```bash
-# Executar o processamento do vídeo
-python main.py
-```
-
-O script irá:
-- Converter o vídeo em frames individuais (salvos na pasta `images/`)
-- Processar cada frame com OCR para detectar placas
-- Validar se o texto detectado corresponde ao padrão de placas brasileiras
-- Gerar um arquivo JSON com os resultados (`plates_beamsearch.json`)
-
-### 6. Execução da API
-
-```bash
-# Primeiro, certifique-se de que existe o arquivo 'plates_beamsearch.json'
-# Se necessário, renomeie o arquivo gerado ou ajuste o código da API
-
-# Executar a API Flask
-python api.py
-```
-
-A API estará disponível em: `http://localhost:5000`
-
-### 7. Testando a API
-
-```bash
-# Testar o endpoint de listagem de placas
-curl http://localhost:5000/placas
-
-# Ou acesse diretamente no navegador:
-# http://localhost:5000/placas
-```
-
-### 8. Configurações Opcionais
-
-#### 8.1. Ajustar Decoder do OCR
-
-No arquivo `main.py`, você pode alterar o tipo de decoder na linha:
-```python
-# Opções: 'greedy', 'beamsearch', 'wordbeamsearch'
-decoder = 'greedy'
-```
-
-#### 8.2. Ajustar Precisão Mínima
-
-Para ajustar a precisão mínima de detecção, modifique no `main.py`:
-```python
-if precision > 0.75 and is_plate:  # Altere 0.75 para o valor desejado
-```
-
-#### 8.3. Ajustar Intervalo de Frames
-
-Para processar mais ou menos frames do vídeo, altere no `main.py`:
-```python
-currentframe += 15  # Altere 15 para o intervalo desejado
-```
-
-### Estrutura de Arquivos do Projeto
-
-Após a execução, a estrutura do projeto será:
-
-```
-plate-recognition-system/
-├── venv/                       # Ambiente virtual
-├── api.py                      # API Flask
-├── main.py                     # Módulo principal de análise
-├── sample.mp4                  # Vídeo de entrada (fornecido pelo usuário)
-├── plates_greedy.json          # Resultados com decoder greedy (opicional)
-└── plates_beamsearch.json      # Resultados com decoder beamsearch
-```
-
-### Formato dos Dados JSON
-
-O arquivo JSON gerado contém as placas detectadas no formato:
-```json
-{
-    "ABC1D23": 0.89,
-    "XYZ9A87": 0.92,
-    "DEF2B34": 0.85
-}
-```
-
-Onde:
-- Chave: Placa detectada no formato Mercosul
-- Valor: Precisão da detecção (0.0 a 1.0)
-
-### Endpoint da API
-
-**GET /placas**
-- **Descrição**: Lista todas as placas detectadas
-- **Resposta de Sucesso (200)**:
-```json
-[
-    {"Placa": "ABC1D23"},
-    {"Placa": "XYZ9A87"},
-    {"Placa": "DEF2B34"}
-]
-```
-- **Resposta de Erro (400)**: JSON vazio
-- **Resposta de Erro (500)**: Erro interno do servidor
-
-### Solução de Problemas Comuns
-
-**Erro: "No module named 'cv2'"**
-```bash
-pip install opencv-python
-```
-
-**Erro: "No module named 'easyocr'"**
-```bash
-pip install easyocr
-```
-
-**Erro: "FileNotFoundError: sample.mp4"**
-- Certifique-se de que o arquivo de vídeo está na raiz do projeto
-- Ou altere o nome do arquivo no código `main.py`
-
-**Erro: "plates_beamsearch.json not found" na API**
-```bash
-# Opção 1: Gere o arquivo com beamsearch
-# Altere decoder = 'beamsearch' no main.py e execute novamente
-
-# Opção 2: Altere o nome do arquivo na api.py
-# Mude 'plates_beamsearch.json' para 'plates_greedy.json'
-```
-
-**API não inicia (porta ocupada)**
-```bash
-# Verifique se a porta 5000 está ocupada
-lsof -i :5000
-
-# Ou altere a porta na api.py adicionando:
-app.run(debug=True, port=5001)
-```
-
-**Performance baixa no processamento**
-- Aumente o intervalo entre frames: `currentframe += 30` (ao invés de 15)
-- Reduza a qualidade do vídeo de entrada
-- Ajuste a precisão mínima para um valor maior
-
-**EasyOCR demora muito para inicializar**
-- Primeira execução sempre demora mais (download de modelos)
-- Execute em um ambiente com boa conexão de internet
-- Considere usar apenas o decoder 'greedy' para melhor performance
-
-### Próximos Passos
-
-Após a configuração local, você pode:
-- Testar com diferentes vídeos de tráfego
-- Explorar os três tipos de decoder do EasyOCR ('greedy', 'beamsearch', 'wordbeamsearch')
-- Ajustar os parâmetros de precisão para otimizar resultados
-- Expandir a API com novos endpoints (filtros, estatísticas, etc.)
-- Implementar interface web para visualização dos resultados
-- Adicionar suporte para outros formatos de vídeo
-
-### Recursos Adicionais
-
-- **Padrão de Placas Mercosul**: Sistema implementado segue o formato ABC1D23
-- **Decoders EasyOCR**: 
-  - `greedy`: Mais rápido, menor precisão
-  - `beamsearch`: Balanceado entre velocidade e precisão
-  - `wordbeamsearch`: Mais lento, maior precisão
-- **Logs detalhados**: Utilize o Loguru para monitorar o processamento
-
-Para suporte adicional, consulte a documentação oficial do [EasyOCR](https://github.com/JaidedAI/EasyOCR) e [OpenCV](https://docs.opencv.org/).
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

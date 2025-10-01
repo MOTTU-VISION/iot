@@ -39,7 +39,10 @@ export const AlertsPanel = ({ open, alerts, cameras, onClose }: AlertsPanelProps
                         <div key={idx} className={`p-4 rounded-lg border ${getSeverityColor(alert.severity)}`}>
                             <div className="flex items-start justify-between">
                                 <div className="flex-1">
-                                    <p className="font-medium">{alert.alert}</p>
+                                    <p className="font-medium">
+                                        {alert.alert} : 
+                                        <span className="font-semibold">{alert.placa}</span>
+                                    </p>
                                     <p className="text-sm mt-1">Câmera: {cameras.find(c => c.id === alert.camera_id)?.name}</p>
                                     <p className="text-xs mt-2 flex items-center gap-1">
                                         <Clock className="w-3 h-3" />

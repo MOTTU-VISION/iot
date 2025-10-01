@@ -34,7 +34,7 @@ def get_records(camera_id):
 
 @app.route("/alerts")
 def get_alerts():
-    known_plates = ["JAF9344", "XYZ9999"]
+    known_plates = ["JAF9344", "DZD2612", "HFW7318", "PHU5243", "DZD2610"]
     check_alerts(known_plates)
     alerts = load_alerts() #cache
     if not alerts:
