@@ -2,8 +2,16 @@
 /backend/data/records/
 /backend/yolo*
 
+/backend/data/alerts/alerts.json
 /backend/__pycache__/
 /backend/*.pyc
+/backend/.env
+/backend/.idea/*
+/backend/.idea
+
 
 /frontend/node_modules/
-backend/data/alerts/alerts.json
+
+/.idea
+/.idea/*
+

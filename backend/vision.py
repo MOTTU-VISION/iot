@@ -7,8 +7,9 @@ from ultralytics import YOLO
 yolo_model = YOLO("yolov8n.pt")  # pode trocar por yolov8s.pt para mais precisão
 ocr_reader = easyocr.Reader(["en"])
 
+## Retorna um registro ao extrair e validar uma placa
 def analyze_frame(frame, camera_id):
-    results = yolo_model(frame)
+    results = yolo_model(frame, stream=True)
     records = []
 
     for r in results:
@@ -23,8 +24,11 @@ def analyze_frame(frame, camera_id):
             if label in [2, 3, 5, 7]:  # carro, moto, ônibus, caminhão
                 vehicle_img = frame[y1:y2, x1:x2]
 
-                # OCR na região do veículo (simplificação: aplicando OCR no veículo inteiro)
-                text = ocr_reader.readtext(vehicle_img)
+                try:
+                    # OCR na região do veículo (simplificação: aplicando OCR no veículo inteiro)
+                    text = ocr_reader.readtext(vehicle_img)
+                except Exception as e:
+                    print(str(e))
 
                 # Concatena todos os textos detectados
                 raw_text = "".join([res[1] for res in text]) if text else ""

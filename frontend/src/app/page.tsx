@@ -26,7 +26,7 @@ const Home = () => {
     const fetchRecords = async () => {
       setLoading(true);
       try {
-        const { data } = await apiClient.get(`/records/file/${selectedCamera}`);
+        const { data } = await apiClient.get(`/records/${selectedCamera}`);
         setRecords(data);
       } catch (err) {
         console.error("Erro ao carregar registros:", err);
@@ -38,18 +38,16 @@ const Home = () => {
     fetchRecords();
   }, [selectedCamera]);
 
-  useEffect(() => {
-    const fetchAlerts = async () => {
-      try {
-        const { data } = await apiClient.get(`/alerts`);
-        setAlerts(data);
-      } catch (err) {
-        console.error("Erro ao carregar alertas:", err);
-      }
-    };
+  const fetchAlerts = async () => {
+    try {
+      const { data } = await apiClient.get(`/alerts`);
+      setAlerts(data);
+    } catch (err) {
+      console.error("Erro ao carregar alertas:", err);
+    }
+  };
 
-    fetchAlerts();
-  }, []);
+  setInterval(() => fetchAlerts(), 10000);
 
   return (
     <div className="h-screen bg-gray-50 flex overflow-hidden">
